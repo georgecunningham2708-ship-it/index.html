@@ -6,12 +6,15 @@
 <title>Cutscene</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Google Fonts -->
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Special+Elite&display=swap" rel="stylesheet">
+
 <style>
   body {
     margin: 0;
     background: black;
     color: white;
-    font-family: Arial, sans-serif;
     overflow: hidden;
   }
 
@@ -24,8 +27,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 32px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
     cursor: pointer;
+    opacity: 1;
+    transition: opacity 1s;
   }
 
   .center {
@@ -36,17 +43,21 @@
     text-align: center;
   }
 
+  /* LEGACY STYLE */
   #mainText {
-    font-size: 64px;
+    font-size: 70px;
     opacity: 0;
+    font-family: 'Special Elite', monospace;
     transition: opacity 1s ease;
   }
 
+  /* SUBTEXT */
   #subText {
     font-size: 32px;
     margin-top: 20px;
     color: orange;
     opacity: 0;
+    font-family: 'Orbitron', sans-serif;
     transition: opacity 1s ease;
   }
 
@@ -83,6 +94,7 @@
   .cinematic {
     color: orange;
     text-shadow: 0 0 20px orange, 0 0 40px red;
+    font-family: 'Orbitron', sans-serif;
   }
 </style>
 
@@ -99,17 +111,15 @@
   <div id="subText"></div>
 </div>
 
-<!-- AUDIO -->
+<!-- WIND AUDIO ONLY -->
 
-<audio id="glitchSound" src="https://www.myinstants.com/media/sounds/glitch.mp3"></audio> <audio id="windSound" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
+<audio id="windSound" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
 
 <script>
 const startScreen = document.getElementById("startScreen");
 const main = document.getElementById("mainText");
 const sub = document.getElementById("subText");
 const container = document.getElementById("container");
-
-const glitchSound = document.getElementById("glitchSound");
 const windSound = document.getElementById("windSound");
 
 // shake helper
@@ -118,25 +128,23 @@ function doShake() {
   setTimeout(() => container.classList.remove("shake"), 300);
 }
 
-// START CUTSCENE AFTER CLICK
+// START
 startScreen.addEventListener("click", () => {
-  startScreen.style.display = "none";
+  startScreen.style.opacity = 0;
+  setTimeout(() => startScreen.style.display = "none", 1000);
 
-  // start wind audio
-  windSound.loop = true;
-  windSound.volume = 0.3;
+  // wind only (no loop now)
+  windSound.volume = 0.4;
   windSound.play();
 
-  // STEP 1: LEGACY appears
+  // LEGACY appears
   setTimeout(() => {
     main.style.opacity = 1;
   }, 500);
 
-  // glitch + sound
+  // glitch
   setTimeout(() => {
     main.classList.add("glitch");
-    glitchSound.currentTime = 0;
-    glitchSound.play();
     doShake();
   }, 1200);
 
@@ -148,7 +156,7 @@ startScreen.addEventListener("click", () => {
     main.classList.remove("glitch");
   }, 2500);
 
-  // STEP 2: transition
+  // transition
   setTimeout(() => {
     main.innerText = "THE UNSEEN MYTH";
     main.classList.remove("glitch");
