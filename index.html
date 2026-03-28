@@ -16,19 +16,25 @@
     overflow: hidden;
   }
 
+  #flash {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+  }
+
   #startScreen {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: black;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: 'Orbitron', sans-serif;
     font-size: 28px;
-    letter-spacing: 3px;
     cursor: pointer;
-    transition: opacity 1s;
   }
 
   .center {
@@ -42,25 +48,20 @@
   #presents {
     font-size: 36px;
     font-style: italic;
-    font-family: 'Orbitron', sans-serif;
     opacity: 0;
-    transition: opacity 2s ease;
+    transition: opacity 2s;
   }
 
   #mainText {
     font-size: 70px;
     opacity: 0;
-    font-family: 'Special Elite', monospace;
-    transition: opacity 1s ease;
+    font-family: 'Special Elite';
   }
 
   #subText {
     font-size: 32px;
-    margin-top: 20px;
     color: orange;
     opacity: 0;
-    font-family: 'Orbitron', sans-serif;
-    transition: opacity 1s ease;
   }
 
   #credits, #postCredit, #smiley {
@@ -68,64 +69,43 @@
     width: 100%;
     text-align: center;
     opacity: 0;
-    transition: opacity 2s ease;
+    transition: opacity 2s;
   }
 
-  #credits {
-    bottom: 12%;
-    font-size: 28px;
-    font-family: 'Orbitron', sans-serif;
-    text-shadow: 0 0 10px white, 0 0 20px orange;
-  }
-
-  #postCredit {
-    bottom: 5%;
-    font-size: 20px;
-    font-family: 'Special Elite', monospace;
-    color: #aaa;
-  }
-
+  #credits { bottom: 12%; }
+  #postCredit { bottom: 5%; }
   #smiley {
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateY(-50%);
     font-size: 80px;
-    font-family: 'Special Elite', monospace;
-    color: white;
-    text-shadow: 0 0 20px white;
   }
 
   .glitch {
-    color: #a020f0;
-    text-shadow: 0 0 10px #a020f0, 0 0 25px purple;
+    color: purple;
     animation: glitch 0.1s infinite;
   }
 
   @keyframes glitch {
-    0% { transform: translate(-50%, -50%) translate(0px, 0px); }
-    25% { transform: translate(-50%, -50%) translate(5px, -5px); }
-    50% { transform: translate(-50%, -50%) translate(-5px, 5px); }
-    75% { transform: translate(-50%, -50%) translate(3px, -3px); }
-    100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+    0% { transform: translate(-50%, -50%) translate(0,0); }
+    50% { transform: translate(-50%, -50%) translate(5px,-5px); }
+    100% { transform: translate(-50%, -50%) translate(0,0); }
   }
 
   .shake {
-    animation: shake 0.3s;
+    animation: shake 0.4s;
   }
 
   @keyframes shake {
     0% { transform: translate(0,0); }
-    20% { transform: translate(-10px, 5px); }
-    40% { transform: translate(10px, -5px); }
-    60% { transform: translate(-8px, 4px); }
-    80% { transform: translate(8px, -4px); }
+    25% { transform: translate(-15px,10px); }
+    50% { transform: translate(15px,-10px); }
+    75% { transform: translate(-10px,5px); }
     100% { transform: translate(0,0); }
   }
 
   .cinematic {
     color: orange;
-    text-shadow: 0 0 20px orange, 0 0 40px red;
-    font-family: 'Orbitron', sans-serif;
+    text-shadow: 0 0 30px orange, 0 0 60px red;
   }
 </style>
 
@@ -133,6 +113,7 @@
 
 <body>
 
+<div id="flash"></div>
 <div id="startScreen">CLICK TO START</div>
 
 <div class="center" id="container">
@@ -145,106 +126,102 @@
 <div id="postCredit">This series will have 7 seasons</div>
 <div id="smiley">:)</div>
 
-<!-- REAL WIND (NO CATS 💀) -->
+<!-- AUDIO -->
 
-<audio id="windSound" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946b6f3b9c.mp3"></audio>
+<audio id="windSound" src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946b6f3b9c.mp3"></audio> <audio id="boom" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_cinematic_hit.mp3"></audio> <audio id="music" src="https://cdn.pixabay.com/download/audio/2022/08/04/audio_cinematic_ambient.mp3"></audio>
 
 <script>
 const startScreen = document.getElementById("startScreen");
 const presents = document.getElementById("presents");
 const main = document.getElementById("mainText");
 const sub = document.getElementById("subText");
-const container = document.getElementById("container");
 const credits = document.getElementById("credits");
 const post = document.getElementById("postCredit");
 const smiley = document.getElementById("smiley");
-const windSound = document.getElementById("windSound");
+const flash = document.getElementById("flash");
 
-function doShake() {
-  container.classList.add("shake");
-  setTimeout(() => container.classList.remove("shake"), 300);
+const wind = document.getElementById("windSound");
+const boom = document.getElementById("boom");
+const music = document.getElementById("music");
+
+function shake() {
+  document.body.classList.add("shake");
+  setTimeout(() => document.body.classList.remove("shake"), 400);
 }
 
-function fadeOutAudio(audio, duration) {
-  let steps = 20;
-  let stepTime = duration / steps;
-  let volStep = audio.volume / steps;
+startScreen.onclick = () => {
+  startScreen.style.display = "none";
 
-  let fade = setInterval(() => {
-    if (audio.volume > volStep) {
-      audio.volume -= volStep;
-    } else {
-      audio.volume = 0;
-      clearInterval(fade);
-      audio.pause();
-    }
-  }, stepTime);
-}
+  wind.loop = true;
+  wind.volume = 0.3;
+  wind.play();
 
-startScreen.addEventListener("click", () => {
-  startScreen.style.opacity = 0;
-  setTimeout(() => startScreen.style.display = "none", 1000);
+  // presents
+  setTimeout(()=>presents.style.opacity=1,500);
+  setTimeout(()=>presents.style.opacity=0,3000);
 
-  // WIND START
-  windSound.loop = true;
-  windSound.volume = 0.4;
-  windSound.play().catch(() => {
-    setTimeout(() => windSound.play(), 500);
-  });
+  // legacy
+  setTimeout(()=>main.style.opacity=1,3500);
 
-  // PRESENTS
-  setTimeout(() => { presents.style.opacity = 1; }, 500);
-  setTimeout(() => { presents.style.opacity = 0; }, 3000);
-
-  // LEGACY
-  setTimeout(() => { main.style.opacity = 1; }, 3500);
-
-  setTimeout(() => {
+  // flicker out
+  setTimeout(()=>{
     main.classList.add("glitch");
-    doShake();
-  }, 4200);
+    shake();
+  },4500);
 
-  setTimeout(() => { main.classList.remove("glitch"); }, 5500);
+  setTimeout(()=>{
+    main.style.opacity=0;
+  },5500);
 
-  // TITLE
-  setTimeout(() => {
-    main.innerText = "THE UNSEEN MYTH";
+  // SLAM
+  setTimeout(()=>{
+    flash.style.opacity=1;
+    boom.play();
+    shake();
+
+    setTimeout(()=>flash.style.opacity=0,100);
+
+    music.volume = 0.6;
+    music.play();
+
+    main.innerText="THE UNSEEN MYTH";
     main.classList.add("cinematic");
-    doShake();
-  }, 6000);
+    main.style.opacity=1;
 
-  setTimeout(() => {
-    sub.innerText = "BATTLEGROUND";
-    sub.style.opacity = 1;
-  }, 7500);
+  },6000);
 
-  setTimeout(() => { sub.innerText = "EPISODE 1"; }, 10000);
-  setTimeout(() => { sub.innerText = "BEGINNING"; }, 12000);
+  setTimeout(()=>{
+    sub.innerText="BATTLEGROUND";
+    sub.style.opacity=1;
+  },7500);
 
-  // FADE OUT TITLE
-  setTimeout(() => {
-    main.style.opacity = 0;
-    sub.style.opacity = 0;
-  }, 14500);
+  setTimeout(()=>sub.innerText="EPISODE 1",10000);
+  setTimeout(()=>sub.innerText="BEGINNING",12000);
 
-  // CREDITS
-  setTimeout(() => { credits.style.opacity = 1; }, 16500);
-  setTimeout(() => { credits.style.opacity = 0; }, 19500);
+  // fade out all
+  setTimeout(()=>{
+    main.style.opacity=0;
+    sub.style.opacity=0;
+    credits.style.opacity=1;
+  },15000);
 
-  // WIND FADE
-  setTimeout(() => {
-    fadeOutAudio(windSound, 3000);
-  }, 20000);
+  setTimeout(()=>credits.style.opacity=0,18000);
 
-  // POST CREDIT
-  setTimeout(() => { post.style.opacity = 1; }, 22000);
-  setTimeout(() => { post.style.opacity = 0; }, 26000);
+  setTimeout(()=>{
+    post.style.opacity=1;
+  },20000);
 
-  // SMILEY 👁️
-  setTimeout(() => { smiley.style.opacity = 1; }, 28000);
-  setTimeout(() => { smiley.style.opacity = 0; }, 32000);
+  setTimeout(()=>{
+    post.style.opacity=0;
+    smiley.style.opacity=1;
+  },23000);
 
-});
+  // FINAL FADE WITH SMILEY
+  setTimeout(()=>{
+    smiley.style.opacity=0;
+    document.body.style.background="black";
+  },27000);
+};
 </script>
 
 </body>
