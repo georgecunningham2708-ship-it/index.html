@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Unseen</title>
+<title>Cutscene</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Special+Elite&display=swap" rel="stylesheet">
@@ -99,7 +99,6 @@
     text-shadow: 0 0 30px orange, 0 0 60px red;
   }
 
-  /* ✨ GLOW OUTLINE EFFECT */
   .outlineGlow {
     color: transparent;
     -webkit-text-stroke: 2px orange;
@@ -113,7 +112,6 @@
     50% { text-shadow: 0 0 40px red, 0 0 80px orange; }
     100% { text-shadow: 0 0 10px orange; }
   }
-
 </style>
 
 </head>
@@ -164,51 +162,39 @@ startScreen.onclick = () => {
   setTimeout(()=>main.classList.add("glitch"),4500);
   setTimeout(()=>main.style.opacity=0,5500);
 
-  // ⚡ OUTLINE BUILD-UP
+  // ✨ Outline build-up
   setTimeout(()=>{
     main.innerText="THE UNSEEN HOUSEHOLD";
     main.className="outlineGlow";
     main.style.opacity=1;
   },6000);
 
-  // 💥 FULL SLAM
+  // 💥 Full cinematic slam
   setTimeout(()=>{
     flash.style.opacity=1;
     boom.play();
-
     setTimeout(()=>flash.style.opacity=0,100);
-
     music.volume = 0.6;
     music.play();
-
     main.className="cinematic";
   },7000);
 
-  setTimeout(()=>{
-    sub.innerText="BATTLEGROUND";
-    sub.style.opacity=1;
-  },8500);
-
+  setTimeout(()=>{ sub.innerText="BATTLEGROUND"; sub.style.opacity=1; },8500);
   setTimeout(()=>sub.innerText="EPISODE 1",11000);
   setTimeout(()=>sub.innerText="BEGINNING",13000);
 
-  setTimeout(()=>{
-    main.style.opacity=0;
-    sub.style.opacity=0;
-    credits.style.opacity=1;
-  },16000);
-
+  setTimeout(()=>{ main.style.opacity=0; sub.style.opacity=0; credits.style.opacity=1; },16000);
   setTimeout(()=>credits.style.opacity=0,19000);
-
   setTimeout(()=>post.style.opacity=1,21000);
-  setTimeout(()=>{
-    post.style.opacity=0;
-    smiley.style.opacity=1;
-  },24000);
+  setTimeout(()=>{ post.style.opacity=0; smiley.style.opacity=1; },24000);
 
+  // 🔴 Fade to WHITE and end cutscene
   setTimeout(()=>{
     smiley.style.opacity=0;
-    flash.style.opacity=1;
+    flash.style.opacity=1; // full white
+    wind.pause();
+    music.pause();
+    boom.pause();
   },28000);
 };
 </script>
