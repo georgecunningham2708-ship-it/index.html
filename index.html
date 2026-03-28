@@ -134,9 +134,11 @@
 <div id="credits">Created by: GStudios and Bloxxer</div>
 <div id="postCredit">This series will have 7 seasons</div>
 
-<!-- NEW WIND SOUND -->
+<!-- WORKING WIND AUDIO -->
 
-<audio id="windSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5b2c5c9c72.mp3"></audio>
+<audio id="windSound" preload="auto">
+  <source src="https://cdn.freesound.org/previews/415/415209_5121236-lq.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 const startScreen = document.getElementById("startScreen");
@@ -173,9 +175,14 @@ startScreen.addEventListener("click", () => {
   startScreen.style.opacity = 0;
   setTimeout(() => startScreen.style.display = "none", 1000);
 
+  // PLAY WIND (FIXED)
   windSound.loop = true;
   windSound.volume = 0.4;
-  windSound.play();
+
+  windSound.play().catch(() => {
+    console.log("Retrying audio...");
+    setTimeout(() => windSound.play(), 500);
+  });
 
   setTimeout(() => { presents.style.opacity = 1; }, 500);
   setTimeout(() => { presents.style.opacity = 0; }, 3000);
@@ -209,16 +216,13 @@ startScreen.addEventListener("click", () => {
     sub.style.opacity = 0;
   }, 14500);
 
-  // credits fade in + out
   setTimeout(() => { credits.style.opacity = 1; }, 16500);
   setTimeout(() => { credits.style.opacity = 0; }, 19500);
 
-  // fade wind out
   setTimeout(() => {
     fadeOutAudio(windSound, 3000);
   }, 20000);
 
-  // post credit fade in + out
   setTimeout(() => { post.style.opacity = 1; }, 22000);
   setTimeout(() => { post.style.opacity = 0; }, 26000);
 
