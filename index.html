@@ -63,7 +63,7 @@
     transition: opacity 1s ease;
   }
 
-  #credits, #postCredit {
+  #credits, #postCredit, #smiley {
     position: absolute;
     width: 100%;
     text-align: center;
@@ -83,6 +83,16 @@
     font-size: 20px;
     font-family: 'Special Elite', monospace;
     color: #aaa;
+  }
+
+  #smiley {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    font-family: 'Special Elite', monospace;
+    color: white;
+    text-shadow: 0 0 20px white;
   }
 
   .glitch {
@@ -133,12 +143,11 @@
 
 <div id="credits">Created by: GStudios and Bloxxer</div>
 <div id="postCredit">This series will have 7 seasons</div>
+<div id="smiley">:)</div>
 
-<!-- WORKING WIND AUDIO -->
+<!-- REAL WIND (NO CATS 💀) -->
 
-<audio id="windSound" preload="auto">
-  <source src="https://cdn.freesound.org/previews/415/415209_5121236-lq.mp3" type="audio/mpeg">
-</audio>
+<audio id="windSound" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946b6f3b9c.mp3"></audio>
 
 <script>
 const startScreen = document.getElementById("startScreen");
@@ -148,6 +157,7 @@ const sub = document.getElementById("subText");
 const container = document.getElementById("container");
 const credits = document.getElementById("credits");
 const post = document.getElementById("postCredit");
+const smiley = document.getElementById("smiley");
 const windSound = document.getElementById("windSound");
 
 function doShake() {
@@ -175,18 +185,18 @@ startScreen.addEventListener("click", () => {
   startScreen.style.opacity = 0;
   setTimeout(() => startScreen.style.display = "none", 1000);
 
-  // PLAY WIND (FIXED)
+  // WIND START
   windSound.loop = true;
   windSound.volume = 0.4;
-
   windSound.play().catch(() => {
-    console.log("Retrying audio...");
     setTimeout(() => windSound.play(), 500);
   });
 
+  // PRESENTS
   setTimeout(() => { presents.style.opacity = 1; }, 500);
   setTimeout(() => { presents.style.opacity = 0; }, 3000);
 
+  // LEGACY
   setTimeout(() => { main.style.opacity = 1; }, 3500);
 
   setTimeout(() => {
@@ -196,6 +206,7 @@ startScreen.addEventListener("click", () => {
 
   setTimeout(() => { main.classList.remove("glitch"); }, 5500);
 
+  // TITLE
   setTimeout(() => {
     main.innerText = "THE UNSEEN MYTH";
     main.classList.add("cinematic");
@@ -205,26 +216,33 @@ startScreen.addEventListener("click", () => {
   setTimeout(() => {
     sub.innerText = "BATTLEGROUND";
     sub.style.opacity = 1;
-    doShake();
   }, 7500);
 
   setTimeout(() => { sub.innerText = "EPISODE 1"; }, 10000);
   setTimeout(() => { sub.innerText = "BEGINNING"; }, 12000);
 
+  // FADE OUT TITLE
   setTimeout(() => {
     main.style.opacity = 0;
     sub.style.opacity = 0;
   }, 14500);
 
+  // CREDITS
   setTimeout(() => { credits.style.opacity = 1; }, 16500);
   setTimeout(() => { credits.style.opacity = 0; }, 19500);
 
+  // WIND FADE
   setTimeout(() => {
     fadeOutAudio(windSound, 3000);
   }, 20000);
 
+  // POST CREDIT
   setTimeout(() => { post.style.opacity = 1; }, 22000);
   setTimeout(() => { post.style.opacity = 0; }, 26000);
+
+  // SMILEY 👁️
+  setTimeout(() => { smiley.style.opacity = 1; }, 28000);
+  setTimeout(() => { smiley.style.opacity = 0; }, 32000);
 
 });
 </script>
