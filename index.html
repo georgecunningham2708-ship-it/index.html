@@ -39,7 +39,6 @@
     text-align: center;
   }
 
-  /* PRESENTS TEXT */
   #presents {
     font-size: 36px;
     font-style: italic;
@@ -64,28 +63,26 @@
     transition: opacity 1s ease;
   }
 
-  #credits {
+  #credits, #postCredit {
     position: absolute;
-    bottom: 12%;
     width: 100%;
     text-align: center;
-    font-size: 28px;
-    font-family: 'Orbitron', sans-serif;
     opacity: 0;
-    text-shadow: 0 0 10px white, 0 0 20px orange;
     transition: opacity 2s ease;
   }
 
+  #credits {
+    bottom: 12%;
+    font-size: 28px;
+    font-family: 'Orbitron', sans-serif;
+    text-shadow: 0 0 10px white, 0 0 20px orange;
+  }
+
   #postCredit {
-    position: absolute;
     bottom: 5%;
-    width: 100%;
-    text-align: center;
     font-size: 20px;
     font-family: 'Special Elite', monospace;
     color: #aaa;
-    opacity: 0;
-    transition: opacity 3s ease;
   }
 
   .glitch {
@@ -134,10 +131,12 @@
   <div id="subText"></div>
 </div>
 
-<div id="credits">Created by: GStudios and Joseph</div>
+<div id="credits">Created by: GStudios and Bloxxer</div>
 <div id="postCredit">This series will have 7 seasons</div>
 
-<audio id="windSound" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
+<!-- NEW WIND SOUND -->
+
+<audio id="windSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5b2c5c9c72.mp3"></audio>
 
 <script>
 const startScreen = document.getElementById("startScreen");
@@ -154,7 +153,6 @@ function doShake() {
   setTimeout(() => container.classList.remove("shake"), 300);
 }
 
-// fade out wind smoothly
 function fadeOutAudio(audio, duration) {
   let steps = 20;
   let stepTime = duration / steps;
@@ -175,35 +173,22 @@ startScreen.addEventListener("click", () => {
   startScreen.style.opacity = 0;
   setTimeout(() => startScreen.style.display = "none", 1000);
 
-  // wind starts
   windSound.loop = true;
   windSound.volume = 0.4;
   windSound.play();
 
-  // PRESENTS
-  setTimeout(() => {
-    presents.style.opacity = 1;
-  }, 500);
+  setTimeout(() => { presents.style.opacity = 1; }, 500);
+  setTimeout(() => { presents.style.opacity = 0; }, 3000);
 
-  setTimeout(() => {
-    presents.style.opacity = 0;
-  }, 3000);
-
-  // LEGACY
-  setTimeout(() => {
-    main.style.opacity = 1;
-  }, 3500);
+  setTimeout(() => { main.style.opacity = 1; }, 3500);
 
   setTimeout(() => {
     main.classList.add("glitch");
     doShake();
   }, 4200);
 
-  setTimeout(() => {
-    main.classList.remove("glitch");
-  }, 5500);
+  setTimeout(() => { main.classList.remove("glitch"); }, 5500);
 
-  // TRANSITION
   setTimeout(() => {
     main.innerText = "THE UNSEEN MYTH";
     main.classList.add("cinematic");
@@ -219,26 +204,24 @@ startScreen.addEventListener("click", () => {
   setTimeout(() => { sub.innerText = "EPISODE 1"; }, 10000);
   setTimeout(() => { sub.innerText = "BEGINNING"; }, 12000);
 
-  // fade out main
   setTimeout(() => {
     main.style.opacity = 0;
     sub.style.opacity = 0;
   }, 14500);
 
-  // credits
-  setTimeout(() => {
-    credits.style.opacity = 1;
-  }, 16500);
+  // credits fade in + out
+  setTimeout(() => { credits.style.opacity = 1; }, 16500);
+  setTimeout(() => { credits.style.opacity = 0; }, 19500);
 
-  // fade out wind BEFORE post credit
+  // fade wind out
   setTimeout(() => {
     fadeOutAudio(windSound, 3000);
-  }, 18000);
+  }, 20000);
 
-  // post credit
-  setTimeout(() => {
-    post.style.opacity = 1;
-  }, 21000);
+  // post credit fade in + out
+  setTimeout(() => { post.style.opacity = 1; }, 22000);
+  setTimeout(() => { post.style.opacity = 0; }, 26000);
+
 });
 </script>
 
