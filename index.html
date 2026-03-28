@@ -15,6 +15,19 @@
     overflow: hidden;
   }
 
+  /* START SCREEN */
+  #startScreen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    cursor: pointer;
+  }
+
   .center {
     position: absolute;
     top: 50%;
@@ -37,8 +50,10 @@
     transition: opacity 1s ease;
   }
 
-  /* GLITCH */
+  /* PURPLE GLITCH */
   .glitch {
+    color: #a020f0;
+    text-shadow: 0 0 10px #a020f0, 0 0 25px purple;
     animation: glitch 0.1s infinite;
   }
 
@@ -50,7 +65,7 @@
     100% { transform: translate(-50%, -50%) translate(0px, 0px); }
   }
 
-  /* SCREEN SHAKE */
+  /* SHAKE */
   .shake {
     animation: shake 0.3s;
   }
@@ -64,7 +79,7 @@
     100% { transform: translate(0,0); }
   }
 
-  /* CINEMATIC ORANGE */
+  /* CINEMATIC */
   .cinematic {
     color: orange;
     text-shadow: 0 0 20px orange, 0 0 40px red;
@@ -75,69 +90,94 @@
 
 <body>
 
+<!-- CLICK TO START -->
+
+<div id="startScreen">CLICK TO START</div>
+
 <div class="center" id="container">
   <div id="mainText">LEGACY</div>
   <div id="subText"></div>
 </div>
 
+<!-- AUDIO -->
+
+<audio id="glitchSound" src="https://www.myinstants.com/media/sounds/glitch.mp3"></audio> <audio id="windSound" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
+
 <script>
+const startScreen = document.getElementById("startScreen");
 const main = document.getElementById("mainText");
 const sub = document.getElementById("subText");
 const container = document.getElementById("container");
 
-// helper for shake
+const glitchSound = document.getElementById("glitchSound");
+const windSound = document.getElementById("windSound");
+
+// shake helper
 function doShake() {
   container.classList.add("shake");
   setTimeout(() => container.classList.remove("shake"), 300);
 }
 
-// STEP 1: LEGACY appears
-setTimeout(() => {
-  main.style.opacity = 1;
-}, 500);
+// START CUTSCENE AFTER CLICK
+startScreen.addEventListener("click", () => {
+  startScreen.style.display = "none";
 
-// glitch + shake
-setTimeout(() => {
-  main.classList.add("glitch");
-  doShake();
-}, 1200);
+  // start wind audio
+  windSound.loop = true;
+  windSound.volume = 0.3;
+  windSound.play();
 
-setTimeout(() => {
-  doShake();
-}, 1600);
+  // STEP 1: LEGACY appears
+  setTimeout(() => {
+    main.style.opacity = 1;
+  }, 500);
 
-setTimeout(() => {
-  main.classList.remove("glitch");
-}, 2500);
+  // glitch + sound
+  setTimeout(() => {
+    main.classList.add("glitch");
+    glitchSound.currentTime = 0;
+    glitchSound.play();
+    doShake();
+  }, 1200);
 
-// STEP 2: transition
-setTimeout(() => {
-  main.innerText = "THE UNSEEN MYTH";
-  main.classList.add("cinematic");
-  doShake();
-}, 3000);
+  setTimeout(() => {
+    doShake();
+  }, 1600);
 
-// subtitle appears with impact
-setTimeout(() => {
-  sub.innerText = "BATTLEGROUND";
-  sub.style.opacity = 1;
-  doShake();
-}, 4500);
+  setTimeout(() => {
+    main.classList.remove("glitch");
+  }, 2500);
 
-// episode text
-setTimeout(() => {
-  sub.innerText = "EPISODE 1";
-}, 7000);
+  // STEP 2: transition
+  setTimeout(() => {
+    main.innerText = "THE UNSEEN MYTH";
+    main.classList.remove("glitch");
+    main.classList.add("cinematic");
+    doShake();
+  }, 3000);
 
-setTimeout(() => {
-  sub.innerText = "BEGINNING";
-}, 9000);
+  // subtitle
+  setTimeout(() => {
+    sub.innerText = "BATTLEGROUND";
+    sub.style.opacity = 1;
+    doShake();
+  }, 4500);
 
-// fade out
-setTimeout(() => {
-  main.style.opacity = 0;
-  sub.style.opacity = 0;
-}, 11500);
+  // episode text
+  setTimeout(() => {
+    sub.innerText = "EPISODE 1";
+  }, 7000);
+
+  setTimeout(() => {
+    sub.innerText = "BEGINNING";
+  }, 9000);
+
+  // fade out
+  setTimeout(() => {
+    main.style.opacity = 0;
+    sub.style.opacity = 0;
+  }, 11500);
+});
 </script>
 
 </body>
