@@ -6,8 +6,6 @@
 <title>Cutscene</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google Fonts -->
-
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Special+Elite&display=swap" rel="stylesheet">
 
 <style>
@@ -18,7 +16,6 @@
     overflow: hidden;
   }
 
-  /* START SCREEN */
   #startScreen {
     position: absolute;
     width: 100%;
@@ -31,7 +28,6 @@
     font-size: 28px;
     letter-spacing: 3px;
     cursor: pointer;
-    opacity: 1;
     transition: opacity 1s;
   }
 
@@ -43,7 +39,15 @@
     text-align: center;
   }
 
-  /* LEGACY STYLE */
+  /* PRESENTS TEXT */
+  #presents {
+    font-size: 36px;
+    font-style: italic;
+    font-family: 'Orbitron', sans-serif;
+    opacity: 0;
+    transition: opacity 2s ease;
+  }
+
   #mainText {
     font-size: 70px;
     opacity: 0;
@@ -51,7 +55,6 @@
     transition: opacity 1s ease;
   }
 
-  /* SUBTEXT */
   #subText {
     font-size: 32px;
     margin-top: 20px;
@@ -61,7 +64,30 @@
     transition: opacity 1s ease;
   }
 
-  /* PURPLE GLITCH */
+  #credits {
+    position: absolute;
+    bottom: 12%;
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    font-family: 'Orbitron', sans-serif;
+    opacity: 0;
+    text-shadow: 0 0 10px white, 0 0 20px orange;
+    transition: opacity 2s ease;
+  }
+
+  #postCredit {
+    position: absolute;
+    bottom: 5%;
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    font-family: 'Special Elite', monospace;
+    color: #aaa;
+    opacity: 0;
+    transition: opacity 3s ease;
+  }
+
   .glitch {
     color: #a020f0;
     text-shadow: 0 0 10px #a020f0, 0 0 25px purple;
@@ -76,7 +102,6 @@
     100% { transform: translate(-50%, -50%) translate(0px, 0px); }
   }
 
-  /* SHAKE */
   .shake {
     animation: shake 0.3s;
   }
@@ -90,7 +115,6 @@
     100% { transform: translate(0,0); }
   }
 
-  /* CINEMATIC */
   .cinematic {
     color: orange;
     text-shadow: 0 0 20px orange, 0 0 40px red;
@@ -102,89 +126,119 @@
 
 <body>
 
-<!-- CLICK TO START -->
-
 <div id="startScreen">CLICK TO START</div>
 
 <div class="center" id="container">
+  <div id="presents">Bloxxer Games and GStudios Presents...</div>
   <div id="mainText">LEGACY</div>
   <div id="subText"></div>
 </div>
 
-<!-- WIND AUDIO ONLY -->
+<div id="credits">Created by: GStudios and Joseph</div>
+<div id="postCredit">This series will have 7 seasons</div>
 
 <audio id="windSound" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
 
 <script>
 const startScreen = document.getElementById("startScreen");
+const presents = document.getElementById("presents");
 const main = document.getElementById("mainText");
 const sub = document.getElementById("subText");
 const container = document.getElementById("container");
+const credits = document.getElementById("credits");
+const post = document.getElementById("postCredit");
 const windSound = document.getElementById("windSound");
 
-// shake helper
 function doShake() {
   container.classList.add("shake");
   setTimeout(() => container.classList.remove("shake"), 300);
 }
 
-// START
+// fade out wind smoothly
+function fadeOutAudio(audio, duration) {
+  let steps = 20;
+  let stepTime = duration / steps;
+  let volStep = audio.volume / steps;
+
+  let fade = setInterval(() => {
+    if (audio.volume > volStep) {
+      audio.volume -= volStep;
+    } else {
+      audio.volume = 0;
+      clearInterval(fade);
+      audio.pause();
+    }
+  }, stepTime);
+}
+
 startScreen.addEventListener("click", () => {
   startScreen.style.opacity = 0;
   setTimeout(() => startScreen.style.display = "none", 1000);
 
-  // wind only (no loop now)
+  // wind starts
+  windSound.loop = true;
   windSound.volume = 0.4;
   windSound.play();
 
-  // LEGACY appears
+  // PRESENTS
   setTimeout(() => {
-    main.style.opacity = 1;
+    presents.style.opacity = 1;
   }, 500);
 
-  // glitch
+  setTimeout(() => {
+    presents.style.opacity = 0;
+  }, 3000);
+
+  // LEGACY
+  setTimeout(() => {
+    main.style.opacity = 1;
+  }, 3500);
+
   setTimeout(() => {
     main.classList.add("glitch");
     doShake();
-  }, 1200);
-
-  setTimeout(() => {
-    doShake();
-  }, 1600);
+  }, 4200);
 
   setTimeout(() => {
     main.classList.remove("glitch");
-  }, 2500);
+  }, 5500);
 
-  // transition
+  // TRANSITION
   setTimeout(() => {
     main.innerText = "THE UNSEEN MYTH";
-    main.classList.remove("glitch");
     main.classList.add("cinematic");
     doShake();
-  }, 3000);
+  }, 6000);
 
-  // subtitle
   setTimeout(() => {
     sub.innerText = "BATTLEGROUND";
     sub.style.opacity = 1;
     doShake();
-  }, 4500);
+  }, 7500);
 
-  // episode text
-  setTimeout(() => {
-    sub.innerText = "EPISODE 1";
-  }, 7000);
+  setTimeout(() => { sub.innerText = "EPISODE 1"; }, 10000);
+  setTimeout(() => { sub.innerText = "BEGINNING"; }, 12000);
 
-  setTimeout(() => {
-    sub.innerText = "BEGINNING";
-  }, 9000);
-
-  // fade out
+  // fade out main
   setTimeout(() => {
     main.style.opacity = 0;
     sub.style.opacity = 0;
-  }, 11500);
+  }, 14500);
+
+  // credits
+  setTimeout(() => {
+    credits.style.opacity = 1;
+  }, 16500);
+
+  // fade out wind BEFORE post credit
+  setTimeout(() => {
+    fadeOutAudio(windSound, 3000);
+  }, 18000);
+
+  // post credit
+  setTimeout(() => {
+    post.style.opacity = 1;
+  }, 21000);
 });
 </script>
 
