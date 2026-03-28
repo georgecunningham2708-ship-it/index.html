@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Cutscene</title>
+<title>Unseen</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Special+Elite&display=swap" rel="stylesheet">
@@ -23,6 +23,7 @@
     background: white;
     opacity: 0;
     pointer-events: none;
+    transition: opacity 1s;
   }
 
   #startScreen {
@@ -74,9 +75,11 @@
 
   #credits { bottom: 12%; }
   #postCredit { bottom: 5%; }
+
   #smiley {
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 80px;
   }
 
@@ -86,27 +89,31 @@
   }
 
   @keyframes glitch {
-    0% { transform: translate(-50%, -50%) translate(0,0); }
-    50% { transform: translate(-50%, -50%) translate(5px,-5px); }
-    100% { transform: translate(-50%, -50%) translate(0,0); }
-  }
-
-  .shake {
-    animation: shake 0.4s;
-  }
-
-  @keyframes shake {
-    0% { transform: translate(0,0); }
-    25% { transform: translate(-15px,10px); }
-    50% { transform: translate(15px,-10px); }
-    75% { transform: translate(-10px,5px); }
-    100% { transform: translate(0,0); }
+    0% { text-shadow: 2px 2px purple; }
+    50% { text-shadow: -2px -2px magenta; }
+    100% { text-shadow: 2px 2px purple; }
   }
 
   .cinematic {
     color: orange;
     text-shadow: 0 0 30px orange, 0 0 60px red;
   }
+
+  /* ✨ GLOW OUTLINE EFFECT */
+  .outlineGlow {
+    color: transparent;
+    -webkit-text-stroke: 2px orange;
+    text-shadow: 0 0 20px orange, 0 0 40px red;
+    opacity: 0.7;
+    animation: pulseGlow 1s infinite;
+  }
+
+  @keyframes pulseGlow {
+    0% { text-shadow: 0 0 10px orange; }
+    50% { text-shadow: 0 0 40px red, 0 0 80px orange; }
+    100% { text-shadow: 0 0 10px orange; }
+  }
+
 </style>
 
 </head>
@@ -116,7 +123,7 @@
 <div id="flash"></div>
 <div id="startScreen">CLICK TO START</div>
 
-<div class="center" id="container">
+<div class="center">
   <div id="presents">Bloxxer Games and GStudios Presents...</div>
   <div id="mainText">LEGACY</div>
   <div id="subText"></div>
@@ -126,9 +133,7 @@
 <div id="postCredit">This series will have 7 seasons</div>
 <div id="smiley">:)</div>
 
-<!-- AUDIO -->
-
-<audio id="windSound" src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946b6f3b9c.mp3"></audio> <audio id="boom" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_cinematic_hit.mp3"></audio> <audio id="music" src="https://cdn.pixabay.com/download/audio/2022/08/04/audio_cinematic_ambient.mp3"></audio>
+<audio id="wind" src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_946b6f3b9c.mp3"></audio> <audio id="boom" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_cinematic_hit.mp3"></audio> <audio id="music" src="https://cdn.pixabay.com/download/audio/2022/08/04/audio_cinematic_ambient.mp3"></audio>
 
 <script>
 const startScreen = document.getElementById("startScreen");
@@ -140,14 +145,9 @@ const post = document.getElementById("postCredit");
 const smiley = document.getElementById("smiley");
 const flash = document.getElementById("flash");
 
-const wind = document.getElementById("windSound");
+const wind = document.getElementById("wind");
 const boom = document.getElementById("boom");
 const music = document.getElementById("music");
-
-function shake() {
-  document.body.classList.add("shake");
-  setTimeout(() => document.body.classList.remove("shake"), 400);
-}
 
 startScreen.onclick = () => {
   startScreen.style.display = "none";
@@ -156,71 +156,60 @@ startScreen.onclick = () => {
   wind.volume = 0.3;
   wind.play();
 
-  // presents
   setTimeout(()=>presents.style.opacity=1,500);
   setTimeout(()=>presents.style.opacity=0,3000);
 
-  // legacy
   setTimeout(()=>main.style.opacity=1,3500);
 
-  // flicker out
-  setTimeout(()=>{
-    main.classList.add("glitch");
-    shake();
-  },4500);
+  setTimeout(()=>main.classList.add("glitch"),4500);
+  setTimeout(()=>main.style.opacity=0,5500);
 
+  // ⚡ OUTLINE BUILD-UP
   setTimeout(()=>{
-    main.style.opacity=0;
-  },5500);
+    main.innerText="THE UNSEEN HOUSEHOLD";
+    main.className="outlineGlow";
+    main.style.opacity=1;
+  },6000);
 
-  // SLAM
+  // 💥 FULL SLAM
   setTimeout(()=>{
     flash.style.opacity=1;
     boom.play();
-    shake();
 
     setTimeout(()=>flash.style.opacity=0,100);
 
     music.volume = 0.6;
     music.play();
 
-    main.innerText="THE UNSEEN MYTH";
-    main.classList.add("cinematic");
-    main.style.opacity=1;
-
-  },6000);
+    main.className="cinematic";
+  },7000);
 
   setTimeout(()=>{
     sub.innerText="BATTLEGROUND";
     sub.style.opacity=1;
-  },7500);
+  },8500);
 
-  setTimeout(()=>sub.innerText="EPISODE 1",10000);
-  setTimeout(()=>sub.innerText="BEGINNING",12000);
+  setTimeout(()=>sub.innerText="EPISODE 1",11000);
+  setTimeout(()=>sub.innerText="BEGINNING",13000);
 
-  // fade out all
   setTimeout(()=>{
     main.style.opacity=0;
     sub.style.opacity=0;
     credits.style.opacity=1;
-  },15000);
+  },16000);
 
-  setTimeout(()=>credits.style.opacity=0,18000);
+  setTimeout(()=>credits.style.opacity=0,19000);
 
-  setTimeout(()=>{
-    post.style.opacity=1;
-  },20000);
-
+  setTimeout(()=>post.style.opacity=1,21000);
   setTimeout(()=>{
     post.style.opacity=0;
     smiley.style.opacity=1;
-  },23000);
+  },24000);
 
-  // FINAL FADE WITH SMILEY
   setTimeout(()=>{
     smiley.style.opacity=0;
-    document.body.style.background="black";
-  },27000);
+    flash.style.opacity=1;
+  },28000);
 };
 </script>
 
