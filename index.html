@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cutscene</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+  body {
+    margin: 0;
+    background: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+
+  .center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  #mainText {
+    font-size: 64px;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  #subText {
+    font-size: 32px;
+    margin-top: 20px;
+    color: orange;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  /* GLITCH */
+  .glitch {
+    animation: glitch 0.1s infinite;
+  }
+
+  @keyframes glitch {
+    0% { transform: translate(-50%, -50%) translate(0px, 0px); }
+    25% { transform: translate(-50%, -50%) translate(5px, -5px); }
+    50% { transform: translate(-50%, -50%) translate(-5px, 5px); }
+    75% { transform: translate(-50%, -50%) translate(3px, -3px); }
+    100% { transform: translate(-50%, -50%) translate(0px, 0px); }
+  }
+
+  /* SCREEN SHAKE */
+  .shake {
+    animation: shake 0.3s;
+  }
+
+  @keyframes shake {
+    0% { transform: translate(0,0); }
+    20% { transform: translate(-10px, 5px); }
+    40% { transform: translate(10px, -5px); }
+    60% { transform: translate(-8px, 4px); }
+    80% { transform: translate(8px, -4px); }
+    100% { transform: translate(0,0); }
+  }
+
+  /* CINEMATIC ORANGE */
+  .cinematic {
+    color: orange;
+    text-shadow: 0 0 20px orange, 0 0 40px red;
+  }
+</style>
+
+</head>
+
+<body>
+
+<div class="center" id="container">
+  <div id="mainText">LEGACY</div>
+  <div id="subText"></div>
+</div>
+
+<script>
+const main = document.getElementById("mainText");
+const sub = document.getElementById("subText");
+const container = document.getElementById("container");
+
+// helper for shake
+function doShake() {
+  container.classList.add("shake");
+  setTimeout(() => container.classList.remove("shake"), 300);
+}
+
+// STEP 1: LEGACY appears
+setTimeout(() => {
+  main.style.opacity = 1;
+}, 500);
+
+// glitch + shake
+setTimeout(() => {
+  main.classList.add("glitch");
+  doShake();
+}, 1200);
+
+setTimeout(() => {
+  doShake();
+}, 1600);
+
+setTimeout(() => {
+  main.classList.remove("glitch");
+}, 2500);
+
+// STEP 2: transition
+setTimeout(() => {
+  main.innerText = "THE UNSEEN MYTH";
+  main.classList.add("cinematic");
+  doShake();
+}, 3000);
+
+// subtitle appears with impact
+setTimeout(() => {
+  sub.innerText = "BATTLEGROUND";
+  sub.style.opacity = 1;
+  doShake();
+}, 4500);
+
+// episode text
+setTimeout(() => {
+  sub.innerText = "EPISODE 1";
+}, 7000);
+
+setTimeout(() => {
+  sub.innerText = "BEGINNING";
+}, 9000);
+
+// fade out
+setTimeout(() => {
+  main.style.opacity = 0;
+  sub.style.opacity = 0;
+}, 11500);
+</script>
+
+</body>
+</html>
